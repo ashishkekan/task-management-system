@@ -1,2 +1,25 @@
-__pycache__/
-*.pyc
+
+ *.pyc
+ __pycache__/
+ db.sqlite3
+ .env
+ *.log
+ 
+ # VS Code
+ .vscode/
+ 
+ # Mac/Linux
+ .DS_Store
+ 
+ # Env
+ venv/
+ env/
+ 
+ # Migrations
+ */migrations/*.pyc
+ */migrations/__pycache__/
+ # Ignore all __pycache__ folders
+ **/__pycache__/
+ 
+ # Ignore all migrations folders (except for __init__.py if needed)
+ **/migrations/
