@@ -1,0 +1,27 @@
+<!-- tasks/employee_dashboard.html (Update this file) -->
+<h2>Your Tasks</h2>
+<ul>
+    {% for task in tasks %}
+        <li>{{ task.title }} - {{ task.due_date }} - {% if task.completed %} Completed {% else %} <a href="{% url 'log_time' task.id %}">Log Time</a> {% endif %}</li>
+    {% empty %}
+        <p>No tasks assigned</p>
+    {% endfor %}
+</ul>
+
+<h2>Your Goals</h2>
+<ul>
+    {% for goal in goals %}
+        <li>{{ goal.title }} - Due: {{ goal.target_date }} - {% if goal.achieved %} Achieved {% else %} In Progress {% endif %}</li>
+    {% empty %}
+        <p>No goals set</p>
+    {% endfor %}
+</ul>
+
+<h2>Your Journal Entries</h2>
+<ul>
+    {% for entry in journal_entries %}
+        <li>{{ entry.entry_date }} - {{ entry.content }}</li>
+    {% empty %}
+        <p>No journal entries</p>
+    {% endfor %}
+</ul>
