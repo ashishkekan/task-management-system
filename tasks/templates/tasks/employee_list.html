@@ -1,0 +1,8 @@
+<h2>Employees</h2>
+<ul>
+    {% for employee in employees %}
+        <li>{{ employee.user.username }} - Department: {{ employee.department.name }} - Position: {{ employee.position }}</li>
+    {% empty %}
+        <p>No employees available</p>
+    {% endfor %}
+</ul>

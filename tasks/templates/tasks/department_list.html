@@ -1,0 +1,8 @@
+<h2>Departments</h2>
+<ul>
+    {% for department in departments %}
+        <li>{{ department.name }} - {{ department.description }}</li>
+    {% empty %}
+        <p>No departments available</p>
+    {% endfor %}
+</ul>

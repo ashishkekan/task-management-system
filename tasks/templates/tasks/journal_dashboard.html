@@ -1,0 +1,8 @@
+<h2>Your Journal Entries</h2>
+<ul>
+    {% for entry in journal_entries %}
+        <li>{{ entry.entry_date }} - {{ entry.content }}</li>
+    {% empty %}
+        <p>No journal entries</p>
+    {% endfor %}
+</ul>

@@ -1,0 +1,8 @@
+<h2>Your Goals</h2>
+<ul>
+    {% for goal in goals %}
+        <li>{{ goal.title }} - Due: {{ goal.target_date }} - {% if goal.achieved %} Achieved {% else %} In Progress {% endif %}</li>
+    {% empty %}
+        <p>No goals set</p>
+    {% endfor %}
+</ul>
