@@ -19,12 +19,14 @@ from .models import Department, Employee, Goal, Task
 
 # Admin and HOD Views
 def is_admin(user):
+    """Check if the user is an admin (staff user)."""
     return user.is_staff
 
 
 @login_required
 @user_passes_test(is_admin)
 def add_user(request):
+    """View to add a new user. Only accessible by admin users."""
     if request.method == "POST":
         form = UserCreationForm(request.POST or None)
         if form.is_valid():
@@ -41,6 +43,7 @@ def add_user(request):
 
 
 def user_login(request):
+    """Authenticate and log in a user."""
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
@@ -57,6 +60,7 @@ def user_login(request):
 
 
 def user_logout(request):
+    """Log out the currently logged-in user."""
     logout(request)
     return redirect("login_user")
 
@@ -64,6 +68,7 @@ def user_logout(request):
 @login_required
 @user_passes_test(is_admin)
 def edit_user(request, user_id):
+    """Edit an existing user's details. Only accessible by admin users."""
     user = User.objects.get(id=user_id)
 
     if request.method == "POST":
@@ -82,6 +87,7 @@ def edit_user(request, user_id):
 
 @login_required
 def create_task(request):
+    """Create a new task. Only accessible by admin or HOD users."""
     if request.user.is_staff:  # Admin or HOD can create tasks
         if request.method == "POST":
             form = TaskForm(request.POST)
@@ -100,12 +106,14 @@ def create_task(request):
 
 @login_required
 def employee_dashboard(request):
+    """Display the employee's dashboard with assigned tasks."""
     tasks = Task.objects.filter(assigned_to__user=request.user)
     return render(request, "tasks/employee_dashboard.html", {"tasks": tasks})
 
 
 @login_required
 def log_time(request, task_id):
+    """Log working time for a specific task."""
     task = Task.objects.get(id=task_id)
     if request.method == "POST":
         form = TimeLogForm(request.POST)
@@ -125,6 +133,7 @@ def log_time(request, task_id):
 
 @login_required
 def create_goal(request):
+    """Create a new personal goal for the logged-in employee."""
     if request.method == "POST":
         form = GoalForm(request.POST)
         if form.is_valid():
@@ -139,6 +148,7 @@ def create_goal(request):
 
 @login_required
 def goal_dashboard(request):
+    """Display the goals for the logged-in employee."""
     goals = Goal.objects.filter(employee__user=request.user)
     return render(request, "tasks/goal_dashboard.html", {"goals": goals})
 
@@ -149,6 +159,7 @@ def goal_dashboard(request):
 @login_required
 @user_passes_test(lambda u: u.is_staff)  # Restrict to admin staff only
 def create_department(request):
+    """Create a new department. Only accessible by admin staff."""
     if request.method == "POST":
         form = DepartmentForm(request.POST)
         if form.is_valid():
@@ -162,6 +173,7 @@ def create_department(request):
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 def department_list(request):
+    """List all departments. Only accessible by admin staff."""
     departments = Department.objects.all()
     return render(request, "tasks/department_list.html", {"departments": departments})
 
@@ -169,6 +181,7 @@ def department_list(request):
 @login_required
 @user_passes_test(lambda u: u.is_staff)  # Restrict to admin staff only
 def create_employee(request):
+    """Create a new employee record. Only accessible by admin staff."""
     if request.method == "POST":
         form = EmployeeForm(request.POST)
         if form.is_valid():
@@ -182,12 +195,14 @@ def create_employee(request):
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 def employee_list(request):
+    """List all employees. Only accessible by admin staff."""
     employees = Employee.objects.all()
     return render(request, "tasks/employee_list.html", {"employees": employees})
 
 
 @login_required
 def home(request):
+    """Home page view for logged-in users."""
     user = request.user
 
     context = {
@@ -200,6 +215,7 @@ def home(request):
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 def user_list(request):
+    """List all users with pagination. Only accessible by admin staff."""
     users = User.objects.all().order_by("username")
     paginator = Paginator(users, 10)
     page_number = request.GET.get("page")
@@ -209,6 +225,7 @@ def user_list(request):
 
 
 def edit_department(request, department_id):
+    """Edit an existing department."""
     department = get_object_or_404(Department, id=department_id)
     if request.method == "POST":
         form = DepartmentForm(request.POST, instance=department)
@@ -224,6 +241,7 @@ def edit_department(request, department_id):
 
 
 def delete_department(request, department_id):
+    """Delete an existing department."""
     department = get_object_or_404(Department, id=department_id)
     department.delete()
     messages.success(request, "Department deleted successfully.")
