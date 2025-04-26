@@ -72,7 +72,7 @@
                 <a href="{% url 'home' %}">Dashboard</a>
                 <a href="">Tasks</a>
                 {% if user.is_staff %}
-                    <a href="">Department</a>
+                    <a href="{% url 'department_list' %}">Department</a>
                     <a href="{% url 'register_user' %}">Register Emp</a>
                     <a href="{% url 'user_list' %}">Employees</a>
                 {% endif %}

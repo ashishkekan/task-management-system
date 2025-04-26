@@ -1,11 +1,10 @@
 {% extends 'tasks/base.html' %}
-
-{% block title %}Create Department{% endblock %}
+{% block title %}Edit Department{% endblock %}
 
 {% block content %}
 <style>
-    .form-container {
-        background-color: white;
+    .add-user-container {
+        background-color: #fff;
         padding: 30px 40px;
         max-width: 650px;
         margin: 40px auto;
@@ -14,14 +13,19 @@
         border-top: 5px solid #ff8333;
     }
 
-    .form-container h2 {
-        margin-bottom: 30px;
-        color: #ff8333;
-        font-size: 28px;
+    .add-user-container h2 {
         text-align: center;
+        margin-bottom: 30px;
+        font-size: 28px;
+        color: #ff8333;
+    }
+
+    form {
+        width: 100%;
     }
 
     .form-group {
+        width: 100%;
         margin-bottom: 20px;
     }
 
@@ -37,12 +41,14 @@
     .form-group select,
     .form-group textarea {
         width: 100%;
+        display: block;
         padding: 12px;
+        margin: 0 auto;
         border: 1px solid #ccc;
         border-radius: 6px;
         font-size: 15px;
-        transition: border-color 0.3s;
         box-sizing: border-box;
+        transition: border-color 0.3s;
     }
 
     .form-group input:focus,
@@ -59,30 +65,32 @@
         margin-top: 30px;
     }
 
-    .back-btn, .save-btn {
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 6px;
-        border: none;
-        cursor: pointer;
-        text-decoration: none;
-    }
-
     .back-btn {
         background-color: #6c757d;
         color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 15px;
+        transition: background-color 0.3s ease;
     }
 
     .back-btn:hover {
         background-color: #5a6268;
     }
 
-    .save-btn {
+    .submit-btn {
         background-color: #ff8333;
         color: white;
+        padding: 10px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
     }
 
-    .save-btn:hover {
+    .submit-btn:hover {
         background-color: #ff8333;
     }
 
@@ -93,9 +101,9 @@
     }
 </style>
 
-<div class="form-container">
-    <h2>Create Department</h2>
-    <form method="POST">
+<div class="add-user-container">
+    <h2>Edit Department: {{ department.name }}</h2>
+    <form method="post">
         {% csrf_token %}
         {% for field in form %}
             <div class="form-group">
@@ -106,9 +114,10 @@
                 {% endif %}
             </div>
         {% endfor %}
+
         <div class="form-actions">
-            <a href="{% url 'department_list' %}" class="back-btn">← Back</a>
-            <button type="submit" class="save-btn">Create Department</button>
+            <a href="{% url 'department_list' %}" class="back-btn">Cancel</a>
+            <button type="submit" class="submit-btn">Update</button>
         </div>
     </form>
 </div>
