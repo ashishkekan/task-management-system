@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 
 from .forms import (
@@ -13,7 +14,7 @@ from .forms import (
     UserCreationForm,
     UserEditForm,
 )
-from .models import Department, Employee, Goal, Task, TimeLog
+from .models import Department, Employee, Goal, Task
 
 
 # Admin and HOD Views
@@ -36,7 +37,7 @@ def add_user(request):
             messages.error(request, "Please correct the errors below.")
     else:
         form = UserCreationForm()
-    return render(request, "session/add_user.html", {"form": form})
+    return render(request, "tasks/create-user.html", {"form": form})
 
 
 def user_login(request):
@@ -57,7 +58,7 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
-    return redirect("login")
+    return redirect("login_user")
 
 
 @login_required
@@ -183,3 +184,25 @@ def create_employee(request):
 def employee_list(request):
     employees = Employee.objects.all()
     return render(request, "tasks/employee_list.html", {"employees": employees})
+
+
+@login_required
+def home(request):
+    user = request.user
+
+    context = {
+        "user": user,
+    }
+
+    return render(request, "tasks/home.html", context)
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def user_list(request):
+    users = User.objects.all().order_by("username")
+    paginator = Paginator(users, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "tasks/user-list.html", {"users": page_obj})

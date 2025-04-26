@@ -97,7 +97,7 @@
 </style>
 
 <div class="add-user-container">
-    <h2>👤 Add New User</h2>
+    <h2>Add New Employee</h2>
     <form method="post">
         {% csrf_token %}
         <div class="form-group">
@@ -120,12 +120,8 @@
             <label>Password:</label>
             {{ form.password }}
         </div>
-        <div class="checkbox-group">
-            {{ form.is_staff }}
-            <label>Is Admin?</label>
-        </div>
         <div class="form-actions">
-            <a href="{% url 'user_list' %}" class="back-btn">← Back</a>
+            <a href="" class="back-btn">← Back</a>
             <button type="submit" class="submit-btn">Create User</button>
         </div>
     </form>
