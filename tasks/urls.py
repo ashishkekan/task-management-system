@@ -15,6 +15,16 @@ urlpatterns = [
     # Department URLs
     path("create_department/", views.create_department, name="create_department"),
     path("department_list/", views.department_list, name="department_list"),
+    path(
+        "departments/edit/<int:department_id>/",
+        views.edit_department,
+        name="edit_department",
+    ),
+    path(
+        "departments/delete/<int:department_id>/",
+        views.delete_department,
+        name="delete_department",
+    ),
     # Employee URLs
     path("create_employee/", views.create_employee, name="create_employee"),
     path("employee_list/", views.employee_list, name="employee_list"),

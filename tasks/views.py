@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import (
     DepartmentForm,
@@ -206,3 +206,25 @@ def user_list(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, "tasks/user-list.html", {"users": page_obj})
+
+
+def edit_department(request, department_id):
+    department = get_object_or_404(Department, id=department_id)
+    if request.method == "POST":
+        form = DepartmentForm(request.POST, instance=department)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Department updated successfully.")
+            return redirect("all_departments")
+    else:
+        form = DepartmentForm(instance=department)
+    return render(
+        request, "tasks/edit_department.html", {"form": form, "department": department}
+    )
+
+
+def delete_department(request, department_id):
+    department = get_object_or_404(Department, id=department_id)
+    department.delete()
+    messages.success(request, "Department deleted successfully.")
+    return redirect("department_list")
