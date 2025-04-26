@@ -52,7 +52,7 @@ def user_login(request):
         else:
             messages.error(request, "Invalid username or password.")
 
-    return render(request, "session/login.html")
+    return render(request, "tasks/login.html")
 
 
 def user_logout(request):
