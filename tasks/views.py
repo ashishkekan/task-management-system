@@ -27,35 +27,37 @@ def is_admin(user):
 @user_passes_test(is_admin)
 def add_user(request):
     """View to add a new user. Only accessible by admin users."""
-    if request.method == "POST":
-        form = UserCreationForm(request.POST or None)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data["password"])
-            user.save()
-            messages.success(request, f"User '{user.username}' created successfully.")
-            return redirect("home")
-        else:
-            messages.error(request, "Please correct the errors below.")
-    else:
+    if request.method != "POST":
         form = UserCreationForm()
-    return render(request, "tasks/create-user.html", {"form": form})
+        return render(request, "tasks/create-user.html", {"form": form})
+
+    form = UserCreationForm(request.POST or None)
+    if not form.is_valid():
+        messages.error(request, "Please correct the errors below.")
+        return render(request, "tasks/create-user.html", {"form": form})
+
+    user = form.save(commit=False)
+    user.set_password(form.cleaned_data["password"])
+    user.save()
+    messages.success(request, f"User '{user.username}' created successfully.")
+    return redirect("home")
 
 
 def user_login(request):
     """Authenticate and log in a user."""
-    if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
+    if request.method != "POST":
+        return render(request, "tasks/login.html")
 
-        user = authenticate(request, username=username, password=password)
+    username = request.POST["username"]
+    password = request.POST["password"]
 
-        if user:
-            login(request, user)
-            return redirect("home")
-        else:
-            messages.error(request, "Invalid username or password.")
+    user = authenticate(request, username=username, password=password)
 
+    if user:
+        login(request, user)
+        return redirect("home")
+
+    messages.error(request, "Invalid username or password.")
     return render(request, "tasks/login.html")
 
 
@@ -69,36 +71,42 @@ def user_logout(request):
 @user_passes_test(is_admin)
 def edit_user(request, user_id):
     """Edit an existing user's details. Only accessible by admin users."""
-    user = User.objects.get(id=user_id)
+    user = get_object_or_404(User, id=user_id)
 
-    if request.method == "POST":
-        form = UserEditForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "User updated successfully.")
-            return redirect("user_list")
-        else:
-            messages.error(request, "Please correct the errors below.")
-    else:
+    if request.method != "POST":
         form = UserEditForm(instance=user)
+        return render(
+            request, "session/edit_user.html", {"form": form, "user_obj": user}
+        )
 
-    return render(request, "session/edit_user.html", {"form": form, "user_obj": user})
+    form = UserEditForm(request.POST, instance=user)
+    if not form.is_valid():
+        messages.error(request, "Please correct the errors below.")
+        return render(
+            request, "session/edit_user.html", {"form": form, "user_obj": user}
+        )
+
+    form.save()
+    messages.success(request, "User updated successfully.")
+    return redirect("user_list")
 
 
 @login_required
 def create_task(request):
     """Create a new task. Only accessible by admin or HOD users."""
-    if request.user.is_staff:  # Admin or HOD can create tasks
+    if request.user.is_staff:
         if request.method == "POST":
             form = TaskForm(request.POST)
             if form.is_valid():
                 task = form.save(commit=False)
                 task.assigned_to = Employee.objects.get(user=request.user)
                 task.save()
-                return redirect("dashboard")
+                return redirect("employee_dashboard")
         else:
             form = TaskForm()
         return render(request, "tasks/create_tasks.html", {"form": form})
+    else:
+        return redirect("unauthorized")  # or render a 403 page
 
 
 # Employee Views
