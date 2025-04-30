@@ -1,5 +1,6 @@
 """
-Forms for user management, employee tracking, goal setting, journaling, and task/time logging in the task management app.
+Forms for user management, employee tracking, goal setting, journaling, and task/time
+logging in the task management app.
 """
 
 from django import forms
