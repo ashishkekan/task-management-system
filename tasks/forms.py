@@ -1,3 +1,7 @@
+"""
+Forms for user management, employee tracking, goal setting, journaling, and task/time logging in the task management app.
+"""
+
 from django import forms
 from django.contrib.auth.models import User
 
@@ -7,9 +11,6 @@ from .models import Department, Employee, Goal, JournalEntry, Task, TimeLog
 class UserCreationForm(forms.ModelForm):
     """
     Form for creating a new user, including password and admin access checkbox.
-
-    Fields:
-        username, first_name, last_name, email, password, is_staff
     """
 
     password = forms.CharField(widget=forms.PasswordInput)
@@ -30,9 +31,6 @@ class UserCreationForm(forms.ModelForm):
 class UserEditForm(forms.ModelForm):
     """
     Form for editing existing user profile information.
-
-    Fields:
-        first_name, last_name, username, email
     """
 
     class Meta:
@@ -46,13 +44,9 @@ class UserEditForm(forms.ModelForm):
         }
 
 
-# Department Form
 class DepartmentForm(forms.ModelForm):
     """
     Form for creating or updating a department.
-
-    Fields:
-        name, hod
     """
 
     class Meta:
@@ -60,13 +54,9 @@ class DepartmentForm(forms.ModelForm):
         fields = ["name", "hod"]
 
 
-# Employee Form
 class EmployeeForm(forms.ModelForm):
     """
     Form for creating or updating an employee.
-
-    Fields:
-        user, department, date_joined, position
     """
 
     class Meta:
@@ -74,13 +64,9 @@ class EmployeeForm(forms.ModelForm):
         fields = ["user", "department", "date_joined", "position"]
 
 
-# Goal Form
 class GoalForm(forms.ModelForm):
     """
     Form for setting or editing a personal goal for an employee.
-
-    Fields:
-        title, description, target_date, achieved
     """
 
     class Meta:
@@ -88,13 +74,9 @@ class GoalForm(forms.ModelForm):
         fields = ["title", "description", "target_date", "achieved"]
 
 
-# Journal Entry Form
 class JournalEntryForm(forms.ModelForm):
     """
     Form for logging a journal entry.
-
-    Fields:
-        entry_date, content
     """
 
     class Meta:
@@ -102,13 +84,9 @@ class JournalEntryForm(forms.ModelForm):
         fields = ["entry_date", "content"]
 
 
-# Time Log Form
 class TimeLogForm(forms.ModelForm):
     """
     Form for logging time spent on a task.
-
-    Fields:
-        start_time, end_time
     """
 
     class Meta:
@@ -119,9 +97,6 @@ class TimeLogForm(forms.ModelForm):
 class TaskForm(forms.ModelForm):
     """
     Form for creating or editing a task.
-
-    Fields:
-        title, description, assigned_to, due_date, priority
     """
 
     class Meta:
