@@ -1,3 +1,5 @@
-from django.test import TestCase
+"""
+Tests for the Tasks application.
+"""
 
 # Create your tests here.

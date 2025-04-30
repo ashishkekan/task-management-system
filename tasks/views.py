@@ -1,3 +1,10 @@
+"""
+Views for the Tasks application.
+
+This module contains views for managing tasks, departments, employees, goals,
+and user authentication, including login, logout, user creation, and task management.
+"""
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -102,16 +109,13 @@ def create_task(request):
                 task.assigned_to = Employee.objects.get(user=request.user)
                 task.save()
                 return redirect("employee_dashboard")
-        else:
-            form = TaskForm()
+        form = TaskForm()
         return render(request, "tasks/create_tasks.html", {"form": form})
-    else:
-        return redirect("unauthorized")  # or render a 403 page
+
+    return redirect("unauthorized")  # or render a 403 page
 
 
 # Employee Views
-
-
 @login_required
 def employee_dashboard(request):
     """Display the employee's dashboard with assigned tasks."""
@@ -131,14 +135,11 @@ def log_time(request, task_id):
             log.employee = Employee.objects.get(user=request.user)
             log.save()
             return redirect("employee_dashboard")
-    else:
-        form = TimeLogForm()
+    form = TimeLogForm()
     return render(request, "tasks/log_time.html", {"form": form, "task": task})
 
 
 # Goal Views
-
-
 @login_required
 def create_goal(request):
     """Create a new personal goal for the logged-in employee."""
@@ -149,8 +150,7 @@ def create_goal(request):
             goal.employee = Employee.objects.get(user=request.user)
             goal.save()
             return redirect("employee_dashboard")
-    else:
-        form = GoalForm()
+    form = GoalForm()
     return render(request, "tasks/create_goal.html", {"form": form})
 
 
@@ -162,8 +162,6 @@ def goal_dashboard(request):
 
 
 # Admin Views for Departments and Employees
-
-
 @login_required
 @user_passes_test(lambda u: u.is_staff)  # Restrict to admin staff only
 def create_department(request):
@@ -173,8 +171,7 @@ def create_department(request):
         if form.is_valid():
             form.save()
             return redirect("department_list")
-    else:
-        form = DepartmentForm()
+    form = DepartmentForm()
     return render(request, "tasks/create_department.html", {"form": form})
 
 
@@ -195,8 +192,7 @@ def create_employee(request):
         if form.is_valid():
             form.save()
             return redirect("employee_list")
-    else:
-        form = EmployeeForm()
+    form = EmployeeForm()
     return render(request, "tasks/create_employee.html", {"form": form})
 
 
@@ -241,8 +237,7 @@ def edit_department(request, department_id):
             form.save()
             messages.success(request, "Department updated successfully.")
             return redirect("all_departments")
-    else:
-        form = DepartmentForm(instance=department)
+    form = DepartmentForm(instance=department)
     return render(
         request, "tasks/edit_department.html", {"form": form, "department": department}
     )

@@ -1,3 +1,10 @@
+"""
+URL patterns for the Tasks application.
+
+This module defines all the URL routes for the tasks app, including
+authentication, task management, department management, and employee management.
+"""
+
 from django.urls import path
 
 from . import views
