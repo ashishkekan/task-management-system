@@ -71,7 +71,7 @@ def user_login(request):
 def user_logout(request):
     """Log out the currently logged-in user."""
     logout(request)
-    return redirect("login_user")
+    return redirect("login")
 
 
 @login_required
@@ -95,7 +95,7 @@ def edit_user(request, user_id):
 
     form.save()
     messages.success(request, "User updated successfully.")
-    return redirect("user_list")
+    return redirect("user-list")
 
 
 @login_required
@@ -108,7 +108,7 @@ def create_task(request):
                 task = form.save(commit=False)
                 task.assigned_to = Employee.objects.get(user=request.user)
                 task.save()
-                return redirect("employee_dashboard")
+                return redirect("employee-dashboard")
         form = TaskForm()
         return render(request, "tasks/create_tasks.html", {"form": form})
 
@@ -134,7 +134,7 @@ def log_time(request, task_id):
             log.task = task
             log.employee = Employee.objects.get(user=request.user)
             log.save()
-            return redirect("employee_dashboard")
+            return redirect("employee-dashboard")
     form = TimeLogForm()
     return render(request, "tasks/log_time.html", {"form": form, "task": task})
 
@@ -149,7 +149,7 @@ def create_goal(request):
             goal = form.save(commit=False)
             goal.employee = Employee.objects.get(user=request.user)
             goal.save()
-            return redirect("employee_dashboard")
+            return redirect("employee-dashboard")
     form = GoalForm()
     return render(request, "tasks/create_goal.html", {"form": form})
 
@@ -170,7 +170,7 @@ def create_department(request):
         form = DepartmentForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("department_list")
+            return redirect("department-list")
     form = DepartmentForm()
     return render(request, "tasks/create_department.html", {"form": form})
 
@@ -191,7 +191,7 @@ def create_employee(request):
         form = EmployeeForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("employee_list")
+            return redirect("employee-list")
     form = EmployeeForm()
     return render(request, "tasks/create_employee.html", {"form": form})
 
@@ -248,4 +248,4 @@ def delete_department(request, department_id):
     department = get_object_or_404(Department, id=department_id)
     department.delete()
     messages.success(request, "Department deleted successfully.")
-    return redirect("department_list")
+    return redirect("department-list")
