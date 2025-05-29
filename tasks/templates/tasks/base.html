@@ -13,8 +13,8 @@
                 <a href="{% url 'home' %}">Dashboard</a>
                 <a href="">Tasks</a>
                 {% if user.is_staff %}
-                    <a href="{% url 'department_list' %}">Department</a>
-                    <a href="{% url 'user_list' %}">Employees</a>
+                    <a href="{% url 'department-list' %}">Department</a>
+                    <a href="{% url 'user-list' %}">Employees</a>
                 {% endif %}
                 {% if not user.is_staff %}
                     <a href="">My Profile</a>

@@ -1,8 +1,7 @@
-<!-- tasks/employee_dashboard.html (Update this file) -->
 <h2>Your Tasks</h2>
 <ul>
     {% for task in tasks %}
-        <li>{{ task.title }} - {{ task.due_date }} - {% if task.completed %} Completed {% else %} <a href="{% url 'log_time' task.id %}">Log Time</a> {% endif %}</li>
+        <li>{{ task.title }} - {{ task.due_date }} - {% if task.completed %} Completed {% else %} <a href="{% url 'log-time' task.id %}">Log Time</a> {% endif %}</li>
     {% empty %}
         <p>No tasks assigned</p>
     {% endfor %}
