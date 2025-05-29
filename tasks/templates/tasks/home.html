@@ -6,57 +6,80 @@
 <style>
     .dashboard-container {
         max-width: 1000px;
-        margin: -15px auto;
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+
+    .welcome-message {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 25px;
+        color: #333;
+    }
+
+    .dashboard-area {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
     }
 
     .card {
         background-color: #fff;
         border-radius: 12px;
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        padding: 20px 30px;
-        margin-bottom: 30px;
+        padding: 25px 30px;
         transition: transform 0.2s ease;
+        border: 1px solid #ddd;
     }
 
     .card:hover {
-        transform: scale(1.02);
+        transform: scale(1.03);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
     }
 
-    .card h3 {
+    .card h5 {
+        color: #ff8333;
         margin-bottom: 15px;
-        color: #ff8333;
+        font-weight: 700;
+        font-size: 1.25rem;
     }
 
-    .count {
-        font-size: 32px;
-        font-weight: bold;
+    .card p {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #222;
+        margin: 0;
     }
 
-    .session-list li {
-        margin-bottom: 12px;
-    }
-
-    .card-link {
-        text-decoration: none;
-        color: inherit;
-        display: block;
-    }
-
-    .card-footer {
-        color: #ff8333;
-        font-size: 14px;
-    }
-
-    .welcome-message {
-        margin-bottom: 20px;
-        font-size: 20px;
-        font-weight: 600;
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+        .dashboard-area {
+            grid-template-columns: 1fr;
+        }
+        .dashboard-container {
+            padding: 0 10px;
+        }
     }
 </style>
 
 <div class="dashboard-container">
     <div class="welcome-message">
         👋 Welcome, {{ request.user.username|default:request.user.username }}!
+    </div>
+
+    <div class="dashboard-area">
+        <div class="card">
+            <h5>Departments</h5>
+            <p>{{ department }}</p>
+        </div>
+        <div class="card">
+            <h5>Employees</h5>
+            <p>{{ employees }}</p>
+        </div>
+        <div class="card">
+            <h5>Tasks</h5>
+            <p>{{ entries.count }}</p>
+        </div>
     </div>
 </div>
 {% endblock %}

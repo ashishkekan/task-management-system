@@ -208,9 +208,12 @@ def employee_list(request):
 def home(request):
     """Home page view for logged-in users."""
     user = request.user
-
+    department = Department.objects.all().count()
+    employees = User.objects.all().count()
     context = {
         "user": user,
+        "department": department,
+        "employees": employees,
     }
 
     return render(request, "tasks/home.html", context)
